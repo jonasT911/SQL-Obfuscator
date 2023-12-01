@@ -10,10 +10,32 @@ def createTautology():
     #Randomly select value
     return str(listOfTauts[0]) +" = " +str(listOfTauts[1])
     
+def changeLogicOperations (): #Randomly chooses between written and signs, and adds extra meaningless extensions.
+        pass
+
 def obfuscateCommand(string):
-    value=createTautology()
-    output = string +' '+value + ' #'
+    sections=string.split("\'")
+    output = ""
+    for i in range(len(sections)):
+        if(i%2==1):
+            loopTemp=""
+            terms=sections[i].split(" ")
+            print(terms)
+            for term in terms:
+                if ("=" in term):
+                    print("Term is "+str(term))
+                    loopTemp+=" "+str(createTautology())
+                else:
+                    loopTemp+=term
+        else:
+            loopTemp=str(sections[i])
+        if(i<len(sections)-1):   
+            loopTemp+="\'"
+        output+=loopTemp
+    output+="#"
     return output
+    
+    
     
 outputCommand = obfuscateCommand(sys.argv[1])
 
