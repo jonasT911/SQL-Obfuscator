@@ -75,10 +75,12 @@ def obfuscateCommand(string):
     sections=string.split("\'")
     output = ""
     for i in range(len(sections)):
-        
-        sections[i]=changeLogicOperations(sections[i])
-       
         if(i%2==1):
+            sections[i]=changeLogicOperations(sections[i])
+            
+            sections[i] = sections[i].replace(" =","=")
+            sections[i]=sections[i].replace("= ","=")
+            
             loopTemp=""
             terms=sections[i].split(" ")
             print(terms)
