@@ -7,23 +7,6 @@ print("Begin Obfuscator")
 
 SQLcommands = ['\' OR 1=1#']
 
-def modifyEquality(string):# I need to add something earlier to check if there are spaces before or after the equality such that I am missing terms. 
-    sides=string.split("=")
-    listOfTauts= ['0','2/2-1','8-8','COS(PI()/2)','SIN(0)']
-        
-    for j in range(len(sides)):
-        repetitions=random.randint(2,5)#arbitraryMaxes
-       
-        for i in range(repetitions):
-            index = random.randint(0,len(listOfTauts)-1)
-            frontBool= random.randint(0,1)
-            if(frontBool):
-                sides[j]=listOfTauts[index]+"+"+sides[j]
-            else:
-                sides[j]=sides[j]+"+"+listOfTauts[index]
-   
-    #Randomly select value
-    return str( sides[0]+"=" +sides[1])
     
 def replaceChars(string):
     
@@ -38,17 +21,41 @@ def replaceChars(string):
         i+=1
     return string
     
+listOfZeros= ['0','2/2-1','8-8','2*3-6','SIN(0)']
+def modifyEquality(string):# I need to add something earlier to check if there are spaces before or after the equality such that I am missing terms. 
+    sides=string.split("=")
+  
+        
+    for j in range(len(sides)):
+        repetitions=random.randint(2,5)#arbitraryMaxes
+       
+        for i in range(repetitions):
+            index = random.randint(0,len(listOfZeros)-1)
+            frontBool= random.randint(0,1)
+            if(frontBool):
+                sides[j]=listOfZeros[index]+"+"+sides[j]
+            else:
+                sides[j]=sides[j]+"+"+listOfZeros[index]
+   
+    #Randomly select value
+    return str( sides[0]+"=" +sides[1])
+
+
     
 def changeLogicOperations (string): #Randomly chooses between written and signs, and adds extra meaningless extensions.
     orValues=[" OR "," Or "," or "," oR "," || "]
-    andValues=[" AND "," aNd "," And "," aND "," and "," && "]
+    andValues=[" AND "," aNd "," And "," aND "," and "," && "]#I should probably make text less likely.
     
-    for element in orValues:
-        if (element in string):
+    #TODO include spaces in s
+    for element in orValues: 
+        if (element in string): #TODO needs to be changed to not always pick first index
             print("FoundElement")
             p1, sep, p2 = string.partition(element)
             whichString=random.randint(0,len(orValues)-1)
-            string=p1+orValues[whichString]+p2
+            extraOr = orValues[whichString]+listOfZeros[random.randint(0,len(listOfZeros)-1)]
+            
+            whichString=random.randint(0,len(orValues)-1)
+            string=p1+extraOr + orValues[whichString]+p2
             #Put useless or terms here
             
             
@@ -56,8 +63,11 @@ def changeLogicOperations (string): #Randomly chooses between written and signs,
         if (element in string):
             print("FoundElement")
             p1, sep, p2 = str1.partition(element)
-            whichString=random.randint(0,len(orValues)-1)
-            string=p1+andValues[whichString]+p2
+            whichString=random.randint(0,len(andValues)-1)
+            extraAND = andValues[whichString]+"1"
+            whichString=random.randint(0,len(andValues)-1)
+            
+            string=p1+extraAND+andValues[whichString]+p2
                 
     return string
     
